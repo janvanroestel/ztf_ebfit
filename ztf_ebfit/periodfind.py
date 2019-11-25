@@ -125,7 +125,10 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     """
 
     # preproc
+    t_min = np.min(lc[:,0])
     lc = BLS_preproc(lc,reject_outliers)
+    lc[:,0] = lc[:,0] - t_min
+
 
     #
     periods, power = run_BLScuvarbase_search(lc,pmin,pmax,oversampling,
@@ -137,7 +140,7 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     # not optimal, copies data to GPU a second time...
     p,t0,q = BLS_solution(lc,p,qmin,qmax,dlogq)
 
-    return p,t0,q,periods,power
+    return p,t0+t_min,q,periods,power
 
 
 

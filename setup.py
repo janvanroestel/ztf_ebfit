@@ -11,6 +11,5 @@ setup(name='ztf_ebfit',
       install_requires=[
           'numpy',
           'scipy',
-          'matplotlib',
-      ]
+          'matplotlib',],
       zip_safe=False)

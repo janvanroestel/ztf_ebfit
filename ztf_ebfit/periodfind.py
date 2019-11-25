@@ -1,6 +1,10 @@
 import numpy as np
 import astropy.units as u
 from astropy.timeseries import BoxLeastSquares
+try:
+    import cuvarbase.bls as bls
+except:
+    print('WARNING: cuvarbase not found, fast BLS not available')
 
 
 
@@ -110,6 +114,11 @@ def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
 
 def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
         qmin=0.01,qmax=0.1,dlogq=0.1,reject_outliers=False):
+    """ Run BLS periodsearch using cuvarbase. 
+
+    input:
+    lc : array 
+    """
 
     # preproc
     lc = BLS_preproc(lc,reject_outliers)

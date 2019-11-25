@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize, least_squares, brute, basinhopping
 import copy
 
-from .periodfind import 
+from .periodfind import run_BLScuvarbase_search
 from .utils import flux2mag, mag2flux
 from .ebmodels import EBmodel_multiband
 #import .lcmodels as lcmodels

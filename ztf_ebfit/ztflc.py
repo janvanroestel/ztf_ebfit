@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import minimize, least_squares, brute, basinhopping
 import copy
 
+from .periodfind import 
 from .utils import flux2mag, mag2flux
 from .ebmodels import EBmodel_multiband
 #import .lcmodels as lcmodels
@@ -68,9 +69,7 @@ class Ztflc:
 
 
 
-    def run_BLSsearch(self,pmin=0.04,pmax=5.,filters=[1,2]):
-        print('this should do something...')
-    
+    def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=5):
         # run BLS
 
         # set best values
@@ -78,7 +77,14 @@ class Ztflc:
         self.t0 = 0
         # save output
         self.BLS_periods = 0
-        sefl.BLS_power = 0
+        self.BLS_power = 0
+
+        lc = np.c_[self.t,self.yn,self.dy][np.isin(self.fid,filters)]
+        period,power = run_BLScuvarbase_search(,pmin=pmin,pmax=pmax,
+            oversampling=3.,
+            qmin=0.01,qmax=0.1,dlogq=0.1)
+
+        self.BLS = {'period':period,'power':power}
 
 
 
@@ -423,59 +429,6 @@ class Ztflc:
 
         print(output)
 
-def JD2HJD(JD,ra,dec,site='palomar'):
-    """ convert a JD time in a HJD time in utc"""
-    target = coord.SkyCoord(ra*u.deg,dec*u.deg, frame='icrs')
-    tsite = coord.EarthLocation.of_site(site)
-    times = Time(JD, format='jd',
-                      scale='utc', location=tsite)
-    ltt_helio = times.light_travel_time(target, 'heliocentric')
-
-    HJD = JD+ltt_helio
-
-    return HJD
-
-def JD2BJD(JD,ra,dec,site='palomar'):
-    """ convert a JD time in a HJD time in tdb"""
-    target = coord.SkyCoord(ra*u.deg,dec*u.deg, frame='icrs')
-    tsite = coord.EarthLocation.of_site(site)
-    times = Time(JD, format='jd',
-                      scale='utc', location=tsite)
-    ltt_bary = times.light_travel_time(target, 'barycentric')
-
-    HJD = JD+ltt_bary
-
-    return HJD
-
-def HJD2JD(HJD,ra,dec,site='palomar'):
-    """ convert a HJD time in a JD time in utc. Note that this correction is 
-    not exact because the time delay is calculated at the HJD time, and not the 
-    JD time. The difference is very small however, and should not be a problem 
-    for 0.01sec timings."""
-    target = coord.SkyCoord(ra*u.deg,dec*u.deg, frame='icrs')
-    tsite = coord.EarthLocation.of_site(site)
-    times = Time(HJD, format='jd',
-                      scale='utc', location=tsite)
-    ltt_helio = times.light_travel_time(target, 'heliocentric')
-
-    JD = HJD-ltt_helio
-
-    return JD
-
-def BJD2JD(BJD,ra,dec,site='palomar'):
-    """ convert a HJD time (tdb) in a JD time in utc. Note that this correction 
-    is not exact because the time delay is calculated at the HJD time, and not 
-    the JD time. The difference is very small however, and should not be a 
-    problem for 0.01sec timings."""
-    target = coord.SkyCoord(ra*u.deg,dec*u.deg, frame='icrs')
-    tsite = coord.EarthLocation.of_site(site)
-    times = Time(BJD, format='jd',
-                      scale='tdb', location=tsite)
-    ltt_bary = times.light_travel_time(target, 'barycentric')
-
-    JD = BJD-ltt_bary
-
-    return JD
 
 
 
@@ -512,11 +465,4 @@ def check_timedobservation(ra,dec,p,t0,dtp,dtm,buffertime=15./60/24):
         return True
     else:
         return false
-
-
-
-
-
-    
-
 

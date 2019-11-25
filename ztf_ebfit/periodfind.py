@@ -108,7 +108,9 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     p,t0,q = BLS_solution(lc,p,qmin,qmax,dlogq)
 
     idx = np.argmax(power)
-    sig = power[idx]/np.median(power[np.max([0,idx-1001]:np.min([idx+1001],np.size(power)]))
+    d = 5001
+    sig = power[idx]/np.median(power[np.max([0,idx-d]):
+                                                np.min([idx+d],np.size(power)]))
 
     return p,t0,q,periods,power,sig
 

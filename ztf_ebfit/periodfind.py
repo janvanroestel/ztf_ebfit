@@ -76,7 +76,7 @@ def BLS_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1):
 
 
 def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
-        qmin=0.01,qmax=0.1,dlogq=0.1):
+    qmin=0.01,qmax=0.1,dlogq=0.1):
     """Run the cuvarbase BLS method.
     """
 
@@ -124,14 +124,14 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     lc = BLS_preproc(lc,reject_outliers)
 
     #
-    periods, power = run_BLScuvarbase_search(lc,pmin,pmax,oversampling
+    periods, power = run_BLScuvarbase_search(lc,pmin,pmax,oversampling,
                         qmin,qmax,dlogq)
 
     # need a better check for this...
     p = np.argmax(bls_power)
 
     # not optimal, copies data to GPU a second time...
-    p,t0,q = BLS_solution(lc,p,qmin,qmax,dlogq):
+    p,t0,q = BLS_solution(lc,p,qmin,qmax,dlogq)
 
     return p,t0,q,periods,power
 

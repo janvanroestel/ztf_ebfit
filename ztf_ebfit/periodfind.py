@@ -102,10 +102,10 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
                         qmin,qmax,dlogq)
 
     # need a better check for this, maybe also get some kind of significance?
-    p = np.argmax(bls_power)
+    p = periods[np.argmax(power)]
 
     # not optimal, copies data to GPU a second time...
-    p,t0,q = BLS_solution(lc,p,qmin,qmax,dlogq)
+    p,t0,q = run_curvarbase_solution(lc,p,qmin,qmax,dlogq)
 
     idx = np.argmax(power)
     d = 5001

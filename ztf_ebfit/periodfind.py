@@ -1,6 +1,10 @@
 import numpy as np
 import astropy.units as u
-from astropy.timeseries import BoxLeastSquares
+try:
+    from astropy.timeseries import BoxLeastSquares
+except:
+    print('WARNING: astropy.timeseries unavailable, upgrade astropy (requires python 3.6+)')
+
 try:
     import cuvarbase.bls as bls
 except:

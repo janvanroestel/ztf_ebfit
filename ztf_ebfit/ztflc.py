@@ -85,7 +85,7 @@ class Ztflc:
 
         #self.BLS = {'period':period,'power':power}
 
-        p,t0,q,periods,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,
+        p,t0,q,period,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,
             oversampling=3.,qmin=0.01,qmax=0.1,dlogq=0.1)
 
         self.p = p

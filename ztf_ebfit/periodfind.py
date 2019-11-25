@@ -109,8 +109,9 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
 
     idx = np.argmax(power)
     d = 5001
-    sig = power[idx]/np.median(power[np.max([0,idx-d]):
-                                                np.min([idx+d],np.size(power)]))
+    i_min = np.max([0,idx-d])
+    i_max = np.min([idx+d],np.size(power))
+    sig = power[idx]/np.median(power[i_min:i_max]) 
 
     return p,t0,q,periods,power,sig
 

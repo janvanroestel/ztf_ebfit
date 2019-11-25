@@ -84,8 +84,9 @@ def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     """Run the cuvarbase BLS method.
     """
 
-
     t = lc[:,0]
+    t_min = np.min(t)
+    t = t - t_min
     y = lc[:,1]
     dy = lc[:,2]
 
@@ -125,9 +126,8 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     """
 
     # preproc
-    t_min = np.min(lc[:,0])
     lc = BLS_preproc(lc,reject_outliers)
-    lc[:,0] = lc[:,0] - t_min
+
 
 
     #

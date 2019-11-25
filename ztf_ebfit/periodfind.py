@@ -21,48 +21,12 @@ def run_gatspy_multiband(lc,pmin=0.01,pmax=100.):
 
 
 
-def BLS_preproc(data,reject_outliers=False):
-    """ run preprocessing before running bls. This function combined the
-    multiband lightcurves by subtracting the median and remove high outliers 
-    per band
-    """
+def run_curvarbase_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
 
-    # preproc data before fitting; convert to flux and normalise:
-    t = data[:,0]
-    y = data[:,1]
-    dy = data[:,2]
-    f = data[:,3]
-
-    # normalise
-    for k,fid in enumerate(np.sort(np.unique(f))):
-        m = f==fid        
-        med = np.nanmedian(y[m])
-        y[m]/=med
-        dy[m]/=med
-
-    if reject_outliers:
-        o = np.zeros_like(t)
-        # reject outliers
-        for k,fid in enumerate(np.sort(np.unique(f))):
-            m = f==fid        
-            d40p = np.percentile(y[m],90)-np.median(y[m])
-            #print(d40p)
-            o[m] += y[m] > (np.median(y[m])+5*d40p)
-            
-        
-        o = (o>0)
-        print("removed %d outliers" %np.sum(o))
-        t = t[~o]
-        y = y[~o]
-        dy = dy[~o]
-        f = f[~o]
-
-    return np.c_[t,y,dy,f]
-
-
-
-def BLS_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1):
+    # prep data
     t = lc[:,0]
+    t_min = np.min(t)
+    t = t - t_min
     y = lc[:,1]
     dy = lc[:,2]
 
@@ -73,14 +37,15 @@ def BLS_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1):
                      dlogq=dlogq,
                      # Number of overlapping phase bins
                      # to use for finding the best phi0
-                     noverlap=3)
+                     noverlap=noverlap)
     bls_power,sols = bls.eebls_gpu(t, y, dy, [p**-1,],
                                 **search_params)
     return bls_power[0],sols[0][0],sols[0][1]
 
 
+
 def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
-    qmin=0.01,qmax=0.1,dlogq=0.1):
+    qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
     """Run the cuvarbase BLS method.
     """
 
@@ -97,7 +62,7 @@ def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
                      dlogq=dlogq,
                      # Number of overlapping phase bins
                      # to use for finding the best phi0
-                     noverlap=3)
+                     noverlap=noverlap)
 
     baseline = max(t) - min(t)
     df = search_params['qmin'] / baseline / oversampling
@@ -110,37 +75,42 @@ def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
 
     bls_power = bls.eebls_gpu_fast(t, y, dy, freqs,
                                 **search_params)
-
-
-
     return freqs**-1,bls_power
 
 
 
 def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
-        qmin=0.01,qmax=0.1,dlogq=0.1,reject_outliers=False):
+        qmin=0.01,qmax=0.1,dlogq=0.1,pos_sigmaclip=None):
     """ Run BLS periodsearch using cuvarbase. 
 
     input:
     lc : array 
     """
 
-    # preproc
-    lc = BLS_preproc(lc,reject_outliers)
-
-
+    # preproc # THIS NEEDS REVIEWING!!!
+    if pos_sigmaclip is not None:
+        o = np.zeros_like(t)
+        # reject outliers
+        for k,fid in enumerate(np.sort(np.unique(f))):
+            m = f==fid        
+            d40p = np.percentile(y[m],90)-np.median(y[m])
+            #print(d40p)
+            o[m] += y[m] > (np.median(y[m])+5*d40p)
 
     #
     periods, power = run_BLScuvarbase_search(lc,pmin,pmax,oversampling,
                         qmin,qmax,dlogq)
 
-    # need a better check for this...
+    # need a better check for this, maybe also get some kind of significance?
     p = np.argmax(bls_power)
 
     # not optimal, copies data to GPU a second time...
     p,t0,q = BLS_solution(lc,p,qmin,qmax,dlogq)
 
-    return p,t0+t_min,q,periods,power
+    idx = np.argmax(power)
+    sig = power[idx]/np.median(power[np.max([0,idx-1001]:np.min([idx+1001],np.size(power)]))
+
+    return p,t0,q,periods,power,sig
 
 
 

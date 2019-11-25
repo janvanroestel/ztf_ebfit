@@ -80,10 +80,24 @@ class Ztflc:
         self.BLS_power = 0
 
         lc = np.c_[self.t,self.yn,self.dy][np.isin(self.fid,filters)]
-        period,power = run_BLScuvarbase_search(lc,pmin=pmin,pmax=pmax,
+        #period,power = run_BLScuvarbase_search(lc,pmin=pmin,pmax=pmax,
+        #    oversampling=3.,qmin=0.01,qmax=0.1,dlogq=0.1)
+
+        #self.BLS = {'period':period,'power':power}
+
+        p,t0,q,periods,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,
             oversampling=3.,qmin=0.01,qmax=0.1,dlogq=0.1)
 
-        self.BLS = {'period':period,'power':power}
+        self.p = p
+        self.t0 = t0
+        self.dur = q
+        self.BLS = dict()
+        self.BLS['p'] = p
+        self.BLS['t0'] = t0
+        self.BLS['dur'] = q
+        self.BLS['sig'] = sig
+        self.BLS['power'] = power
+        self.BLS['period'] = period
 
 
 

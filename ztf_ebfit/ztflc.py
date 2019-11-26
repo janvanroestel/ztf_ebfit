@@ -83,7 +83,7 @@ class Ztflc:
 
         mask = np.isin(self.fid,filters)
         if clean:
-            mask *= (self.flag==0)
+            mask *= (self.flag == 0)
         if not alerts:
             mask *= (self.alert == 0)
 

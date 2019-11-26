@@ -69,7 +69,8 @@ class Ztflc:
 
 
 
-    def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=5,clean=True,alerts=True):
+    def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=5,
+            clean=True,alerts=True):
         # run BLS
 
         # set best values
@@ -86,7 +87,7 @@ class Ztflc:
         if not alerts:
             mask *= (self.alert == 0)
 
-        lc = np.c_[self.t,self.yn,self.dy][]
+        lc = np.c_[self.t,self.yn,self.dy][mask]
         #period,power = run_BLScuvarbase_search(lc,pmin=pmin,pmax=pmax,
         #    oversampling=3.,qmin=0.01,qmax=0.1,dlogq=0.1)
 

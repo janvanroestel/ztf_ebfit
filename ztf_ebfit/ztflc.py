@@ -101,7 +101,7 @@ class Ztflc:
 
 
 
-    def fit_EBmodel(self,filters=[1,2],fit_period=True,verbose=False,clean=True):
+    def fit_EBmodel(self,filters=[1,2],verbose=False,clean=True,alerts=True):
         # given a period and t0, fit a simple EBmodel 
         # THE NORMALISED DATA WILL BE FITTED!
         # select the best fitting model

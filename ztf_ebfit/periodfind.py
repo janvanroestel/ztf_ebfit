@@ -104,11 +104,11 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
             o[m] += y[m] > (np.median(y[m])+5*d40p)
 
     #
-    periods, power = run_BLScuvarbase_search(lc,pmin,pmax,oversampling,
+    period, power = run_BLScuvarbase_search(lc,pmin,pmax,oversampling,
                         qmin,qmax,dlogq)
 
     # need a better check for this, maybe also get some kind of significance?
-    p = periods[np.argmax(power)]
+    p = period[np.argmax(power)]
     print(p)
 
     # not optimal, copies data to GPU a second time...

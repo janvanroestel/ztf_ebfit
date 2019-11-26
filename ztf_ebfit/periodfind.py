@@ -46,7 +46,7 @@ def run_curvarbase_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
     # calculate t0
     t0 = (np.median(t)//p+(phi0+0.5*q))*p + t_min
 
-    return power,q,t0
+    return power,t0,q
 
 
 
@@ -109,11 +109,9 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
 
     # need a better check for this, maybe also get some kind of significance?
     p = period[np.argmax(power)]
-    print(p)
 
     # not optimal, copies data to GPU a second time...
     _power,t0,q = run_curvarbase_solution(lc,p,qmin,qmax,dlogq)
-    print(_power,t0,q)
 
     # calculate significance
     idx = np.argmax(power)

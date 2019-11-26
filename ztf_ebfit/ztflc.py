@@ -70,32 +70,24 @@ class Ztflc:
 
 
     def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=5,
-            clean=True,alerts=True):
-        # run BLS
+            clean=True,alerts=True,oversampling=3.,qmin=0.01,qmax=0.1,
+            dlogq=0.1,noverlap=3):
 
-        # set best values
-        self.p = 0
-        self.t0 = 0
-        # save output
-        self.BLS_periods = 0
-        self.BLS_power = 0
-
-
+        # make datamask
         mask = np.isin(self.fid,filters)
         if clean:
             mask *= (self.flag == 0)
         if not alerts:
             mask *= (self.alert == 0)
 
+        # the lc to search
         lc = np.c_[self.t,self.yn,self.dy][mask]
-        #period,power = run_BLScuvarbase_search(lc,pmin=pmin,pmax=pmax,
-        #    oversampling=3.,qmin=0.01,qmax=0.1,dlogq=0.1)
 
-        #self.BLS = {'period':period,'power':power}
-
+        # run search
         p,t0,q,period,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,
-            oversampling=3.,qmin=0.01,qmax=0.1,dlogq=0.1)
+            oversampling=oversampling,qmin=qmin,qmax=qmax,dlogq=dlogq)
 
+        # store results
         self.p = p
         self.t0 = t0
         self.dur = q

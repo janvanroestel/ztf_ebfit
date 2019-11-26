@@ -85,7 +85,7 @@ class Ztflc:
 
         # run search
         p,t0,q,period,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,
-            oversampling=oversampling,qmin=qmin,qmax=qmax,dlogq=dlogq,refine=True)
+            oversampling=oversampling,qmin=qmin,qmax=qmax,dlogq=dlogq)
 
         # store results
         self.p = p

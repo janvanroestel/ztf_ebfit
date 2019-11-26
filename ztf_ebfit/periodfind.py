@@ -40,7 +40,13 @@ def run_curvarbase_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
                      noverlap=noverlap)
     bls_power,sols = bls.eebls_gpu(t, y, dy, [p**-1,],
                                 **search_params)
-    return bls_power[0],sols[0][0]+t_min,sols[0][1]
+
+    power,q,phi0 = bls_power[0],sols[0][0],sols[0][1]
+
+    # calculate t0
+    t0 = (np.median(data[:,0])//p+(phi0+0.5*q))*p + t_min
+
+    return power,q,t0
 
 
 

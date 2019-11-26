@@ -107,6 +107,7 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
 
     # not optimal, copies data to GPU a second time...
     _power,t0,q = run_curvarbase_solution(lc,p,qmin,qmax,dlogq)
+    print(_power,t0,q)
 
     # calculate significance
     idx = np.argmax(power)

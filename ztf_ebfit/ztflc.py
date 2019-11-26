@@ -5,7 +5,7 @@ import copy
 
 from .periodfind import run_BLScuvarbase
 from .utils import flux2mag, mag2flux
-from .ebmodels import EBmodel_multiband
+from .ebmodels import EBmodel_multiband, ellc_WDRD
 #import .lcmodels as lcmodels
 
 """import periodfind"""
@@ -85,7 +85,7 @@ class Ztflc:
 
         # run search
         p,t0,q,period,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,
-            oversampling=oversampling,qmin=qmin,qmax=qmax,dlogq=dlogq)
+            oversampling=oversampling,qmin=qmin,qmax=qmax,dlogq=dlogq,refine=True)
 
         # store results
         self.p = p
@@ -109,9 +109,16 @@ class Ztflc:
         # set initial values
         p,t0 = self.p,self.t0
         t,y,dy,fid = self.t,self.yn,self.dyn,self.fid # FIT NORMALISED DATA
+
+        # make datamask
+        mask = np.isin(self.fid,filters)
         if clean:
-            c = self.flag==0
-            t = t[c];y = y[c];dy = dy[c];fid = fid[c];
+            mask *= (self.flag == 0)
+        if not alerts:
+            mask *= (self.alert == 0)
+
+        # the lc to fit
+        lc = np.c_[self.t,self.yn,self.dy,self.fid][mask]
 
         q = self.dur # this should output from a BLS fit
                 
@@ -139,7 +146,7 @@ class Ztflc:
             x_scale = np.r_[x_scale,np.array([0.1,0.1,0.1,0.01,0.01])]
 
         # RUN LSTQ FIT
-        func = lambda pars: ((y-ebmodels.EBmodel_multiband(pars,t,fid))/dy)
+        func = lambda pars: ((y-EBmodel_multiband(pars,t,fid))/dy)
         output = least_squares(func,x0,bounds=bounds.T,x_scale=x_scale,
             verbose=verbose)
 
@@ -152,7 +159,7 @@ class Ztflc:
         self.trap = dict()
         self.trap['output'] = output.x
         #self.trap['output2'] = output2.x
-        self.trap['my'] = ebmodels.EBmodel_multiband(output.x,t,fid)
+        self.trap['my'] = EBmodel_multiband(output.x,t,fid)
 
 
 
@@ -172,7 +179,7 @@ class Ztflc:
             plt.errorbar((self.t-t0)[m]/p%1,self.yn[m],self.dyn[m],
                 marker='.', ls='none',c=self.colours[f])
             _t = np.linspace(t0,t0+p,1000,endpoint=False)
-            _model = ebmodels.EBmodel_multiband(pars,_t,f*np.ones_like(_t),filters=filters)
+            _model = EBmodel_multiband(pars,_t,f*np.ones_like(_t),filters=filters)
             print(_model)
             plt.plot((_t-t0)/p%1,_model,'k-')
             
@@ -332,7 +339,7 @@ class Ztflc:
             c = colours[f]
             m = (self.fid==f) # fit data 
             pars = np.r_[theta[:7],theta[7+k*4:7+(k+1)*4]]
-            mlcs = ebmodels.ellc_WDRD(pars[:-1],mt)   
+            mlcs = ellc_WDRD(pars[:-1],mt)   
             
             plt.figure()
 

@@ -78,3 +78,5 @@ def BJD2JD(BJD,ra,dec,site='palomar'):
 
     return JD
 
+
+

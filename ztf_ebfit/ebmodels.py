@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def EBmodel(pars,t):
     """ a simple EB lightcurve model.
 

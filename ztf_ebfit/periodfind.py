@@ -40,7 +40,7 @@ def run_curvarbase_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
                      noverlap=noverlap)
     bls_power,sols = bls.eebls_gpu(t, y, dy, [p**-1,],
                                 **search_params)
-    return bls_power[0],sols[0][0],sols[0][1]
+    return bls_power[0],sols[0][0]+t_min,sols[0][1]
 
 
 
@@ -105,15 +105,16 @@ def run_BLScuvarbase(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
     p = periods[np.argmax(power)]
 
     # not optimal, copies data to GPU a second time...
-    p,t0,q = run_curvarbase_solution(lc,p,qmin,qmax,dlogq)
+    power,t0,q = run_curvarbase_solution(lc,p,qmin,qmax,dlogq)
 
+    # calculate significance
     idx = np.argmax(power)
     d = 5001
     i_min = np.max([0,idx-d])
     i_max = np.min([idx+d,np.size(power)])
     sig = power[idx]/np.median(power[i_min:i_max]) 
 
-    return p,t0,q,periods,power,sig
+    return p,t0,q,period,power,sig
 
 
 

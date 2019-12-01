@@ -264,7 +264,7 @@ class Ztflc:
 
         l = len(x)
         out = [[np.median(x[ndx:min(ndx + n, l)]),
-                np.median(y[ndx:min(ndx + n, l)])
+                np.median(y[ndx:min(ndx + n, l)]),
                 np.percentile(y[ndx:min(ndx + n, l),ndtr(s)*100])] 
                     for ndx in range(0, l, n)]
         out = np.array(out)

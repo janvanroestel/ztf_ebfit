@@ -253,7 +253,9 @@ class Ztflc:
         print('period set to %12.12f, a %f fractional change' %(p,(self.p-p)/self.p))
         self.p = p
 
-    def plotBLS(self,n=10000):
+    def plotBLS(self,n=10000,s=5):
+        from scipy.special import ndtr
+
         # plot the BLS periodogram
         x,y = self.BLS['period'],self.BLS['power']
 
@@ -261,11 +263,15 @@ class Ztflc:
         plt.step(x,y)
 
         l = len(x)
-        out = [[np.median(x[ndx:min(ndx + n, l)]),np.median(y[ndx:min(ndx + n, l)])] for ndx in range(0, l, n)]
+        out = [[np.median(x[ndx:min(ndx + n, l)]),
+                np.median(y[ndx:min(ndx + n, l)])
+                np.percentile(y[ndx:min(ndx + n, l),ndtr(s)*100])] 
+                    for ndx in range(0, l, n)]
         out = np.array(out)
 
         # plot median curve
-        plt.plot(out[:,0],out[:,1],'C3-')
+        plt.plot(out[:,0],out[:,1],'C2-')
+        plt.plot(out[:,0],out[:,2],'C3-')
 
         # layout
         plt.xlabel('period')

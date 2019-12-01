@@ -253,6 +253,21 @@ class Ztflc:
         print('period set to %12.12f, a %f fractional change' %(p,(self.p-p)/self.p))
         self.p = p
 
+   def plotBLS(self,n=10000):
+        x,y = self.BLS['period'],self.lc.BLS['power']
+
+        plt.step(x,y)
+
+        l = len(x)
+        
+        out = [[np.median(x[ndx:min(ndx + n, l)]),np.median(y[ndx:min(ndx + n, l)])] for ndx in range(0, l, n)]
+
+        out = np.array(out)
+        plt.plot(out[:,0],out[:,1],'C3-')
+        plt.xlabel('period')
+        plt.ylabel('power')
+        plt.show()
+
 
 
     def plotlc(self,folded=False,mag=False,period=None,showflagged=True):

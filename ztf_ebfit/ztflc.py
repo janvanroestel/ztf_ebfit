@@ -255,7 +255,7 @@ class Ztflc:
 
     def plotBLS(self,n=10000):
         # plot the BLS periodogram
-        x,y = self.BLS['period'],self.lc.BLS['power']
+        x,y = self.BLS['period'],self.BLS['power']
 
         # plot data
         plt.step(x,y)

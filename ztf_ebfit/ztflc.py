@@ -103,7 +103,7 @@ class Ztflc:
 
 
     def fit_EBmodel(self,filters=[1,2],verbose=False,clean=True,alerts=True,
-            mcmc=True):
+            mcmc=0):
         # given a period and t0, fit a simple EBmodel 
         # THE NORMALISED DATA WILL BE FITTED!
         # select the best fitting model
@@ -165,7 +165,7 @@ class Ztflc:
 
 
 
-        if mcmc:
+        if nmcmc>0:
             def lnp(pars):
                 #print('running')
                 return -0.5*np.sum(func(pars)**2)
@@ -174,7 +174,7 @@ class Ztflc:
             ndim = len(output.x)
             pos = output.x + x_scale * 10**-2 * np.random.randn(nwalkers, ndim)            
             sampler = emcee.EnsembleSampler(nwalkers, ndim, lnp,)
-            sampler.run_mcmc(pos, 100)    
+            sampler.run_mcmc(pos, mcmc)    
 
             self.trap['sampler'] = sampler            
 

@@ -1,6 +1,7 @@
 import numpy as np
 from astropy.time import Time
 from astropy import coordinates as coord
+from astropy import units as u
 
 def mag2flux(mag,dmag=[],flux_0 = 3631.0):
     # converts magnitude to flux in Jy

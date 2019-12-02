@@ -171,8 +171,8 @@ class Ztflc:
                 return -0.5*np.sum(func(pars))
 
             nwalkers = 128
-            pos = output.x + x_scale * 10**-2 * np.random.randn(nwalkers, len(output.x))
-            sampler = emcee.EnsembleSampler(nwalkers, ndim, lnp,)
+            ndim = len(output.x)
+            pos = output.x + x_scale * 10**-2 * np.random.randn(nwalkers, ndim)            sampler = emcee.EnsembleSampler(nwalkers, ndim, lnp,)
             sampler.run_mcmc(pos, 100)                
 
 

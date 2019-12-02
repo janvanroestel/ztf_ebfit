@@ -93,7 +93,7 @@ def HJD2BJD(HJD,ra,dec,site='palomar'):
 
     # remove heliocentric correction
     ltt_helio = times.light_travel_time(target, 'heliocentric')
-    JD = (times.utc + ltt_helio).jd # remove heliocentric correction
+    JD = (times.utc - ltt_helio).jd # remove heliocentric correction
 
     JDtimes = Time(JD, format='jd',
                       scale='utc', location=tsite)
@@ -101,7 +101,7 @@ def HJD2BJD(HJD,ra,dec,site='palomar'):
     # do barycentric correction
     ltt_bary = JDtimes.light_travel_time(target, 'barycentric')
 
-    BJD = JDtimes.tdb-ltt_bary
+    BJD = JDtimes.tdb+ltt_bary
 
     return BJD.jd
 

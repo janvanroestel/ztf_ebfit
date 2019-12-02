@@ -167,8 +167,8 @@ class Ztflc:
 
         if mcmc:
             def lnp(pars):
-                print('running')
-                return -0.5*np.sum(func(pars))
+                #print('running')
+                return -0.5*np.sum(func(pars)**2)
 
             nwalkers = 128
             ndim = len(output.x)

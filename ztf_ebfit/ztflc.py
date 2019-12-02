@@ -174,7 +174,7 @@ class Ztflc:
             ndim = len(output.x)
             pos = output.x + x_scale * 10**-2 * np.random.randn(nwalkers, ndim)            
             sampler = emcee.EnsembleSampler(nwalkers, ndim, lnp,)
-            sampler.run_mcmc(pos, mcmc)    
+            sampler.run_mcmc(pos, nmcmc)    
 
             self.trap['sampler'] = sampler            
 

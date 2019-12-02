@@ -30,7 +30,7 @@ class Ztflc:
         elif filename is not None:
             self.preproc(np.loadtxt(filename))
         elif data is not None:
-            self.preproc(data)
+            self.preproc(data,inputtime)
         pass 
 
     def preproc(self,data,inputtime):
@@ -52,7 +52,6 @@ class Ztflc:
 
         # convert times
         self.times2BJD(inputtime=inputtime)         
-
 
         # normalise data
         self.normalise_data()

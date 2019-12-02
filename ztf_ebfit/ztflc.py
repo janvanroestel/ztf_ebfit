@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize, least_squares, brute, basinhopping
+from scipy.optimize import minimize, least_squares, brute, basinhopping, curve_fit
 import copy
 
 from .periodfind import run_BLScuvarbase
@@ -146,20 +146,27 @@ class Ztflc:
             x_scale = np.r_[x_scale,np.array([0.1,0.1,0.1,0.01,0.01])]
 
         # RUN LSTQ FIT
-        func = lambda pars: ((y-EBmodel_multiband(pars,t,fid))/dy)
-        output = least_squares(func,x0,bounds=bounds.T,x_scale=x_scale,
-            verbose=verbose)
+        #func = lambda pars: ((y-EBmodel_multiband(pars,t,fid))/dy)
+        #output = least_squares(func,x0,bounds=bounds.T,x_scale=x_scale,
+        #    verbose=verbose)
 
-        self.EBmodel['basepars'] = output.x[:4]
+        #self.EBmodel['basepars'] = output.x[:4]
+        #for n,k in enumerate(filters):
+        #    self.EBmodel['filtpars'][k] = output.x[4+(n*5):4+((n+1)*5)]
+
+    
+        f lambda t: EBmodel_multiband(pars,t,fid)
+        output = curve_fit(f,t,y,p0=x0,sigma=dy,bounds=bounds,absolute_sigma=True)
+
+        self.EBmodel['basepars'] = output.popt[:4]
         for n,k in enumerate(filters):
-            self.EBmodel['filtpars'][k] = output.x[4+(n*5):4+((n+1)*5)]
+            self.EBmodel['filtpars'][k] = output.popt[4+(n*5):4+((n+1)*5)]
 
-        self.EBmodel
 
         self.trap = dict()
         self.trap['output'] = output
         #self.trap['output2'] = output2.x
-        self.trap['my'] = EBmodel_multiband(output.x,t,fid)
+        self.trap['my'] = EBmodel_multiband(output.popt,t,fid)
 
 
 

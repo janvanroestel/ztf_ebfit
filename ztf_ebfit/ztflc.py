@@ -157,7 +157,7 @@ class Ztflc:
         self.EBmodel
 
         self.trap = dict()
-        self.trap['output'] = output.x
+        self.trap['output'] = output
         #self.trap['output2'] = output2.x
         self.trap['my'] = EBmodel_multiband(output.x,t,fid)
 

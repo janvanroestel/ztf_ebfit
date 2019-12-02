@@ -5,7 +5,7 @@ import copy
 import emcee
 
 from .periodfind import run_BLScuvarbase
-from .utils import flux2mag, mag2flux
+from .utils import flux2mag, mag2flux, JD2BJD, HJD2BJD
 from .ebmodels import EBmodel_multiband
 #import .lcmodels as lcmodels
 
@@ -16,7 +16,7 @@ class Ztflc:
     """ Class to store and represent ZTF lightcurves of a single object. 
     """
 
-    def __init__(self,filename=None,data=None):
+    def __init__(self,filename=None,data=None,inputtime='HJD'):
         # set some variables
         self.p = 0 # period
         self.t0 = 0 # mideclipse time
@@ -33,7 +33,7 @@ class Ztflc:
             self.preproc(data)
         pass 
 
-    def preproc(self,data):
+    def preproc(self,data,inputtime):
         self.t = data[:,0]
         self.y = data[:,1]
         self.dy = data[:,2]
@@ -50,8 +50,18 @@ class Ztflc:
         self.Rmag = flux2mag(np.nanmedian(self.y[self.fid==2]))
         self.Gmag = flux2mag(np.nanmedian(self.y[self.fid==1]))
 
+        # convert times
+        self.times2BJD(inputtime=inputtime)         
+
+
         # normalise data
         self.normalise_data()
+
+    def times2BJD(self,inputtime='HJD'):
+        if inputime=='HJD'
+            self.t = HJD2BJD(self.t,self.ra_med,self.ra_dec)
+        if inputime=='JD'
+            self.t = JD2BJD(self.t,self.ra_med,self.ra_dec)
 
     def normalise_data(self):
         yn = copy.deepcopy(self.y)

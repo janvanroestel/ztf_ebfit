@@ -155,7 +155,9 @@ class Ztflc:
         #    self.EBmodel['filtpars'][k] = output.x[4+(n*5):4+((n+1)*5)]
 
     
-        f = lambda t: EBmodel_multiband(pars,t,fid)
+        def f(t,*pars):
+            return EBmodel_multiband(pars,t,fid)
+
         output = curve_fit(f,t,y,p0=x0,sigma=dy,bounds=bounds,absolute_sigma=True)
 
         self.EBmodel['basepars'] = output.popt[:4]

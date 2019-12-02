@@ -58,9 +58,9 @@ class Ztflc:
 
     def times2BJD(self,inputtime='HJD'):
         if inputtime=='HJD':
-            self.t = HJD2BJD(self.t,self.ra_med,self.ra_dec)
+            self.t = HJD2BJD(self.t,self.ra_med,self.dec_med)
         if inputtime=='JD':
-            self.t = JD2BJD(self.t,self.ra_med,self.ra_dec)
+            self.t = JD2BJD(self.t,self.ra_med,self.dec_med)
 
     def normalise_data(self):
         yn = copy.deepcopy(self.y)

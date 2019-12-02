@@ -168,7 +168,7 @@ class Ztflc:
         if mcmc:
             def lnp(pars):
                 print('running')
-                return -0.5*np.sum(func(pars)
+                return -0.5*np.sum(func(pars))
 
             nwalkers = 128
             pos = output.x + x_scale * 10**-2 * np.random.randn(nwalkers, len(output.x))

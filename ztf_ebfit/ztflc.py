@@ -28,7 +28,7 @@ class Ztflc:
         if filename is not None and data is not None:
             print('Cannot give both filename AND data, choice 1')
         elif filename is not None:
-            self.preproc(np.loadtxt(filename))
+            self.preproc(np.loadtxt(filename),inputtime)
         elif data is not None:
             self.preproc(data,inputtime)
         pass 

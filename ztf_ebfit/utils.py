@@ -37,7 +37,7 @@ def JD2HJD(JD,ra,dec,site='palomar'):
 
     HJD = JD+ltt_helio
 
-    return HJD
+    return HJD.jd
 
 def JD2BJD(JD,ra,dec,site='palomar'):
     """ convert a JD time in a HJD time in tdb"""
@@ -49,7 +49,7 @@ def JD2BJD(JD,ra,dec,site='palomar'):
 
     HJD = JD+ltt_bary
 
-    return HJD
+    return HJD.jd
 
 def HJD2JD(HJD,ra,dec,site='palomar'):
     """ convert a HJD time (utc) in a JD time in utc. Note that this correction is 
@@ -64,7 +64,7 @@ def HJD2JD(HJD,ra,dec,site='palomar'):
 
     JD = HJD-ltt_helio
 
-    return JD
+    return JD.jd
 
 def BJD2JD(BJD,ra,dec,site='palomar'):
     """ convert a BJD time (tdb) in a JD time in utc. Note that this correction 
@@ -79,7 +79,7 @@ def BJD2JD(BJD,ra,dec,site='palomar'):
 
     JD = BJD-ltt_bary
 
-    return JD
+    return JD.jd
 
 def HJD2BJD(HJD,ra,dec,site='palomar'):
     """ convert a HJD time (utc) in a BJD time in tdb. Note that this correction 
@@ -95,7 +95,7 @@ def HJD2BJD(HJD,ra,dec,site='palomar'):
 
     BJD = HJD+ltt_helio-ltt_bary
 
-    return BJD
+    return BJD.jd
 
 
 

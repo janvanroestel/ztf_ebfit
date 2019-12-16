@@ -318,12 +318,12 @@ class Ztflc:
         markers = ['o','o','x']
 
         for a,c in zip([1,2,3],colours): # loop over filters
-            for phot,flagged,marker in zip([0,0,1],[True,False,True],markers):
-                m = (self.fid==a)*(self.alert==phot)*((self.flag==0)==flagged)
+            for phot,good,marker in zip([0,0,1],[True,False,True],markers):
+                m = (self.fid==a)*(self.alert==phot)*((self.flag==0)==good)
                 mfc="None" if not flagged else None
                 
                 # do not show flagged data
-                if flagged>0 and not showflagged:
+                if good==False and not showflagged:
                     continue                
 
                 if folded:

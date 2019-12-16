@@ -308,7 +308,8 @@ class Ztflc:
 
 
 
-    def plotlc(self,folded=False,mag=False,period=None,showflagged=True):
+    def plotlc(self,folded=False,mag=False,period=None,showflagged=True,
+            ymin=None,figname=None):
         # plot the lightcurve
         fig, ax1 = plt.subplots()
         ax2 = ax1.twinx()
@@ -339,6 +340,9 @@ class Ztflc:
         if folded:
             plt.xlim(-0.1,1.1)
 
+        if ymin is not None:
+            plt.ylim(lower=ymin)
+
         # add axis 2 labels
         ax2.set_ylim(ax1.get_ylim())
         minmag = -2.5*np.log10(np.max(ax1.get_ylim())/(3631.*10**6))
@@ -354,6 +358,8 @@ class Ztflc:
         ax1.set_ylabel('muJy')
         ax2.set_ylabel('mag')
         plt.xlabel('phase')
+        if figname is not None:
+            plt.savefig(figname)
         plt.show()
 
 

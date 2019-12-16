@@ -312,7 +312,7 @@ class Ztflc:
             ymin=None,figname=None):
         # plot the lightcurve
         fig, ax1 = plt.subplots()
-        ax2 = ax1.twinx()
+
 
         colours = ['C2','C3','k']
         markers = ['o','o','x']
@@ -340,12 +340,13 @@ class Ztflc:
 
         # 
         if folded:
-            plt.xlim(-0.1,1.1)
+            ax1.set_xlim(-0.1,1.1)
 
         if ymin is not None:
-            plt.ylim(bottom=ymin)
+            ax1.set_ylim(bottom=ymin)
 
         # add axis 2 labels
+        ax2 = ax1.twinx()
         ax2.set_ylim(ax1.get_ylim())
         minmag = -2.5*np.log10(np.max(ax1.get_ylim())/(3631.*10**6))
         maxmag = np.nanmin([23.01,-2.5*np.log10(np.min(ax1.get_ylim())/(3631.*10**6))])

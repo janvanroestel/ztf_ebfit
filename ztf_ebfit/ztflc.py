@@ -320,7 +320,8 @@ class Ztflc:
         for a,c in zip([1,2,3],colours): # loop over filters
             for phot,good,marker in zip([0,0,1],[True,False,True],markers):
                 m = (self.fid==a)*(self.alert==phot)*((self.flag==0)==good)
-                mfc="None" if not flagged else None
+                # set marker
+                mfc="None" if not good else None
                 
                 # do not show flagged data
                 if good==False and not showflagged:

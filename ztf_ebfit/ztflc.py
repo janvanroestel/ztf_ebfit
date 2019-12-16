@@ -343,7 +343,7 @@ class Ztflc:
             plt.xlim(-0.1,1.1)
 
         if ymin is not None:
-            plt.ylim(lower=ymin)
+            plt.ylim(bottom=ymin)
 
         # add axis 2 labels
         ax2.set_ylim(ax1.get_ylim())

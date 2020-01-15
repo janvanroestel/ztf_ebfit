@@ -78,8 +78,17 @@ class Ztflc:
         self.dyn = dyn
 
 
+    def outlier_check(y,dy,sigma=3):
+        # check for positive outliers
+        med = np.median(y)
+        MAD = np.median(abs(y-med))
 
-    def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=5,
+        pos_outlier = y > med+sigma*1.48*MAD # if a value is higher than the median plus sigma * (1.48*MAD)
+
+        return pos_outlier
+
+
+    def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=None,
             clean=True,alerts=True,oversampling=3.,qmin=0.01,qmax=0.1,
             dlogq=0.1,noverlap=3):
 
@@ -89,6 +98,8 @@ class Ztflc:
             mask *= (self.flag == 0)
         if not alerts:
             mask *= (self.alert == 0)
+        if pos_sigmaclip is not None:
+            mask *= ~outlier_check(self.yn,self.dyn,pos_sigmaclip)
 
         # the lc to search
         lc = np.c_[self.t,self.yn,self.dy][mask]

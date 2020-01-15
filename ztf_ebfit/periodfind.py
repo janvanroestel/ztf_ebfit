@@ -50,16 +50,31 @@ def run_curvarbase_solution(lc,p,qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
 
 
 
+def outlier_check(y,dy,sigma=3):
+    # check for positive outliers
+    med = np.median(y)
+    MAD = np.median(abs(y-med))
+
+    pos_outlier = y > med+sigma*1.48*MAD # if a value is higher than the median plus sigma * (1.48*MAD)
+
+    return pos_outlier
+
+
 def run_BLScuvarbase_search(lc,pmin=30./60/24.,pmax=3.,oversampling=3.,
-    qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3):
+    qmin=0.01,qmax=0.1,dlogq=0.1,noverlap=3,clippos_sigma=None):
     """Run the cuvarbase BLS method.
     """
 
-    t = lc[:,0]
+    mask = np.ones_like(t)
+
+    if clippos_sigma is not None:
+        mask *= ~outlier_check(lc[:,1],lc[:,2],clippos_sigma)
+
+    t = lc[mask,0]
     t_min = np.min(t)
-    t = t - t_min
-    y = lc[:,1]
-    dy = lc[:,2]
+    t = t[mask] - t_min
+    y = lc[mask,1]
+    dy = lc[mask,2]
 
     # set up search parameters
     search_params = dict(qmin=qmin,

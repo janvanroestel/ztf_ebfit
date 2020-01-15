@@ -94,7 +94,7 @@ class Ztflc:
             # check for positive outliers
             med = np.median(self.yn)
             MAD = np.median(abs(self.yn-med))
-            pos_outlier = self.yn > med+pos_sigmaclip*1.48*MAD 
+            pos_outliers = self.yn > med+pos_sigmaclip*1.48*MAD 
             mask *= ~pos_outliers
 
         # the lc to search

@@ -102,7 +102,7 @@ class Ztflc:
             mask *= ~outlier_check(self.yn,self.dyn,pos_sigmaclip)
 
         # the lc to search
-        lc = np.c_[self.t,self.yn,self.dy][mask]
+        lc = np.c_[self.t,self.yn,self.dyn][mask]
 
         # run search
         p,t0,q,period,power,sig = run_BLScuvarbase(lc,pmin=pmin,pmax=pmax,

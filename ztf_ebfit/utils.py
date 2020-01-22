@@ -35,7 +35,7 @@ def JD2HJD(JD,ra,dec,site='palomar'):
                       scale='utc', location=tsite)
     ltt_helio = times.light_travel_time(target, 'heliocentric')
 
-    HJD = JD+ltt_helio
+    HJD = times.utc+ltt_helio
 
     return HJD.jd
 
@@ -47,9 +47,9 @@ def JD2BJD(JD,ra,dec,site='palomar'):
                       scale='utc', location=tsite)
     ltt_bary = times.light_travel_time(target, 'barycentric')
 
-    HJD = JD.tdb+ltt_bary
+    BJD = times.tdb+ltt_bary
 
-    return HJD.jd
+    return BJD.jd
 
 def HJD2JD(HJD,ra,dec,site='palomar'):
     """ convert a HJD time (utc) in a JD time in utc. Note that this correction is 
@@ -62,7 +62,7 @@ def HJD2JD(HJD,ra,dec,site='palomar'):
                       scale='utc', location=tsite)
     ltt_helio = times.light_travel_time(target, 'heliocentric')
 
-    JD = HJD.utc-ltt_helio
+    JD = times.utc-ltt_helio
 
     return JD.jd
 
@@ -77,7 +77,7 @@ def BJD2JD(BJD,ra,dec,site='palomar'):
                       scale='tdb', location=tsite)
     ltt_bary = times.light_travel_time(target, 'barycentric')
 
-    JD = BJD-ltt_bary
+    JD = times.utc-ltt_bary
 
     return JD.jd
 

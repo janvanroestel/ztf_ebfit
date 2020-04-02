@@ -5,7 +5,7 @@ import copy
 import emcee
 
 from .periodfind import run_BLScuvarbase
-from .utils import flux2mag, mag2flux, JD2BJD, HJD2BJD
+from .utils import flux2mag, mag2flux, JD2BJD, HJD2BJD, nearest_eclipse
 from .ebmodels import EBmodel_multiband
 #import .lcmodels as lcmodels
 
@@ -186,7 +186,11 @@ class Ztflc:
                 for i,b in zip(pars,bounds):
                     if i<b[0] or i>b[1]:
                         return -np.inf
-                return -0.5*np.sum(func(pars)**2)
+                
+                if prior is not None:
+                    return -0.5*np.sum(func(pars)**2)+prior(pars)
+                else:
+                    return -0.5*np.sum(func(pars)**2)
 
             nwalkers = 128
             ndim = len(output.x)
@@ -371,11 +375,4 @@ class Ztflc:
         if figname is not None:
             plt.savefig(figname)
         plt.show()
-
-
-
-
-
-
-
 

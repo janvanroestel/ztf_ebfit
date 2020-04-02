@@ -3,6 +3,14 @@ from astropy.time import Time
 from astropy import coordinates as coord
 from astropy import units as u
 
+
+def nearest_eclipse(t,p,t0):
+
+    N = np.round((t-t0)/p)
+    tn = t0 + N*p
+
+    return tn
+
 def mag2flux(mag,dmag=[],flux_0 = 3631.0):
     # converts magnitude to flux in Jy
     flux = flux_0 * 10**(-0.4*mag)

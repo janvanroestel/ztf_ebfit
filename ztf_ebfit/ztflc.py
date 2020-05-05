@@ -5,7 +5,7 @@ import copy
 import emcee
 
 from .periodfind import run_BLScuvarbase
-from .utils import flux2mag, mag2flux, JD2BJD, HJD2BJD, nearest_eclipse
+from .utils import flux2mag, mag2flux, JD2BJD, HJD2BJD, nearest_eclipse, print_coords
 from .ebmodels import EBmodel_multiband
 #import .lcmodels as lcmodels
 
@@ -32,6 +32,8 @@ class Ztflc:
         elif data is not None:
             self.preproc(data,inputtime)
         pass 
+
+
 
     def preproc(self,data,inputtime):
         self.t = data[:,0]
@@ -79,6 +81,10 @@ class Ztflc:
 
 
 
+    def print_coords(self):
+        print_coords(self.ra_med,self.dec_med)
+
+
 
     def run_BLSsearch(self,pmin=0.02,pmax=5.,filters=[1,2],pos_sigmaclip=None,
             clean=True,alerts=True,oversampling=3.,qmin=0.01,qmax=0.1,
@@ -119,7 +125,7 @@ class Ztflc:
 
 
     def fit_EBmodel(self,filters=[1,2],verbose=False,clean=True,alerts=True,
-            nmcmc=0):
+            nmcmc=0,prior=None):
         # given a period and t0, fit a simple EBmodel 
         # THE NORMALISED DATA WILL BE FITTED!
         # select the best fitting model
@@ -178,8 +184,6 @@ class Ztflc:
         self.trap['output'] = output
         #self.trap['output2'] = output2.x
         self.trap['my'] = EBmodel_multiband(output.x,t,fid)
-
-
 
         if nmcmc>0:
             def lnp(pars):

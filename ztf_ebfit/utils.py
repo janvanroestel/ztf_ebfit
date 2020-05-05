@@ -3,12 +3,20 @@ from astropy.time import Time
 from astropy import coordinates as coord
 from astropy import units as u
 
+def print_coords(ra,dec):
+    """ print coordinates in hhmmss+ddmmss """
+    c = coord.SkyCoord(ra=ra*u.deg,dec=dec*u.deg, frame='icrs')
+    txt = c.to_string('hmsdms')
+    txt = txt.replace("h",":")
+    txt = txt.replace("m",":")
+    txt = txt.replace("s","")
+    txt = txt.replace("d",":")
+    print(txt)
+
 
 def nearest_eclipse(t,p,t0):
-
     N = np.round((t-t0)/p)
     tn = t0 + N*p
-
     return tn
 
 def mag2flux(mag,dmag=[],flux_0 = 3631.0):

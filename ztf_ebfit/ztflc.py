@@ -296,7 +296,7 @@ class Ztflc:
         print('period set to %12.12f, a %f fractional change' %(p,(self.p-p)/self.p))
         self.p = p
 
-    def plotBLS(self,n=10000,s=1):
+    def plotBLS(self,n=10000,s=1,figname=None,show=True):
         from scipy.special import ndtr
 
         # plot the BLS periodogram
@@ -320,12 +320,21 @@ class Ztflc:
         plt.xscale('log')
         plt.xlabel('period')
         plt.ylabel('power')
-        plt.show()
+        
+        elif figname is True:
+            plt.savefig("BLS_%4.4g_%4.4g.pdf" %(self.ra_med,self.dec_med) )
+        elif figname is not None:
+            plt.savefig(figname)
+
+        if show:
+            plt.show()
+        else:
+            plt.close()
 
 
 
     def plotlc(self,folded=False,mag=False,period=None,showflagged=True,
-            ymin=None,figname=None):
+            ymin=None,figname=None,show=True):
         # plot the lightcurve
         fig, ax1 = plt.subplots()
 
@@ -377,7 +386,14 @@ class Ztflc:
         ax1.set_ylabel('muJy')
         ax2.set_ylabel('mag')
         plt.xlabel('phase')
-        if figname is not None:
+
+        elif figname is True:
+            plt.savefig("lc_%4.4g_%4.4g.pdf" %(self.ra_med,self.dec_med) )
+        elif figname is not None:
             plt.savefig(figname)
-        plt.show()
+
+        if show:
+            plt.show()
+        else:
+            plt.close()
 

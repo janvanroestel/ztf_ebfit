@@ -296,7 +296,7 @@ class Ztflc:
         print('period set to %12.12f, a %f fractional change' %(p,(self.p-p)/self.p))
         self.p = p
 
-    def plotBLS(self,n=10000,s=5):
+    def plotBLS(self,n=10000,s=1):
         from scipy.special import ndtr
 
         # plot the BLS periodogram
@@ -317,6 +317,7 @@ class Ztflc:
         plt.plot(out[:,0],out[:,2],'C3-')
 
         # layout
+        plt.xscale('log')
         plt.xlabel('period')
         plt.ylabel('power')
         plt.show()

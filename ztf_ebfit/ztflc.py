@@ -321,7 +321,7 @@ class Ztflc:
         plt.xlabel('period')
         plt.ylabel('power')
         
-        elif figname is True:
+        if figname is True:
             plt.savefig("BLS_%4.4g_%4.4g.pdf" %(self.ra_med,self.dec_med) )
         elif figname is not None:
             plt.savefig(figname)
@@ -387,7 +387,7 @@ class Ztflc:
         ax2.set_ylabel('mag')
         plt.xlabel('phase')
 
-        elif figname is True:
+        if figname is True:
             plt.savefig("lc_%4.4g_%4.4g.pdf" %(self.ra_med,self.dec_med) )
         elif figname is not None:
             plt.savefig(figname)

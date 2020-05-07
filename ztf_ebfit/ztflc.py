@@ -386,7 +386,7 @@ class Ztflc:
         ax1.set_ylabel('muJy')
         ax2.set_ylabel('mag')
         if folded:
-            print('period=',p)
+            print('period=',self.p)
             plt.title('p=%g' %self.p)
             ax1.set_xlabel('phase (p=%f)' %self.p)
             ax2.set_xlabel('phase (p=%f)' %self.p)

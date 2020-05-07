@@ -385,7 +385,11 @@ class Ztflc:
 
         ax1.set_ylabel('muJy')
         ax2.set_ylabel('mag')
-        plt.xlabel('phase')
+        if folded:
+            plt.title('p=%f' %lc.p)
+            ax2.set_xlabel('phase (p=%f)' %lc.p)
+        else:
+            ax2.set_xlabel('phase')
 
         if figname is True:
             plt.savefig("lc_%4.4g_%4.4g.pdf" %(self.ra_med,self.dec_med) )
